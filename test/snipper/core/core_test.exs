@@ -68,4 +68,66 @@ defmodule Snipper.CoreTest do
       assert %Ecto.Changeset{} = Core.change_user(user)
     end
   end
+
+  describe "snips" do
+    alias Snipper.Core.Snip
+
+    @valid_attrs %{content: "some content", title: "some title"}
+    @update_attrs %{content: "some updated content", title: "some updated title"}
+    @invalid_attrs %{content: nil, title: nil}
+
+    def snip_fixture(attrs \\ %{}) do
+      {:ok, snip} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Core.create_snip()
+
+      snip
+    end
+
+    test "list_snips/0 returns all snips" do
+      snip = snip_fixture()
+      assert Core.list_snips() == [snip]
+    end
+
+    test "get_snip!/1 returns the snip with given id" do
+      snip = snip_fixture()
+      assert Core.get_snip!(snip.id) == snip
+    end
+
+    test "create_snip/1 with valid data creates a snip" do
+      assert {:ok, %Snip{} = snip} = Core.create_snip(@valid_attrs)
+      assert snip.content == "some content"
+      assert snip.title == "some title"
+    end
+
+    test "create_snip/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Core.create_snip(@invalid_attrs)
+    end
+
+    test "update_snip/2 with valid data updates the snip" do
+      snip = snip_fixture()
+      assert {:ok, snip} = Core.update_snip(snip, @update_attrs)
+      assert %Snip{} = snip
+      assert snip.content == "some updated content"
+      assert snip.title == "some updated title"
+    end
+
+    test "update_snip/2 with invalid data returns error changeset" do
+      snip = snip_fixture()
+      assert {:error, %Ecto.Changeset{}} = Core.update_snip(snip, @invalid_attrs)
+      assert snip == Core.get_snip!(snip.id)
+    end
+
+    test "delete_snip/1 deletes the snip" do
+      snip = snip_fixture()
+      assert {:ok, %Snip{}} = Core.delete_snip(snip)
+      assert_raise Ecto.NoResultsError, fn -> Core.get_snip!(snip.id) end
+    end
+
+    test "change_snip/1 returns a snip changeset" do
+      snip = snip_fixture()
+      assert %Ecto.Changeset{} = Core.change_snip(snip)
+    end
+  end
 end

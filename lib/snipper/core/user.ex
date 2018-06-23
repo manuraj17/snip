@@ -9,6 +9,7 @@ defmodule Snipper.Core.User do
     field :nickname, :string
     field :token, :string
 
+    has_many :snips, Snipper.Core.Snip
     timestamps()
   end
 

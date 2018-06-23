@@ -1,0 +1,5 @@
+<h2>Edit Snip</h2>
+
+<%= render "form.html", Map.put(assigns, :action, snip_path(@conn, :update, @snip)) %>
+
+<span><%= link "Back", to: snip_path(@conn, :index) %></span>

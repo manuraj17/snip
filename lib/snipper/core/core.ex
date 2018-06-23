@@ -101,4 +101,100 @@ defmodule Snipper.Core do
   def change_user(%User{} = user) do
     User.changeset(user, %{})
   end
+
+  alias Snipper.Core.Snip
+
+  @doc """
+  Returns the list of snips.
+
+  ## Examples
+
+      iex> list_snips()
+      [%Snip{}, ...]
+
+  """
+  def list_snips do
+    Repo.all(Snip)
+  end
+
+  @doc """
+  Gets a single snip.
+
+  Raises `Ecto.NoResultsError` if the Snip does not exist.
+
+  ## Examples
+
+      iex> get_snip!(123)
+      %Snip{}
+
+      iex> get_snip!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_snip!(id), do: Repo.get!(Snip, id)
+
+  @doc """
+  Creates a snip.
+
+  ## Examples
+
+      iex> create_snip(%{field: value})
+      {:ok, %Snip{}}
+
+      iex> create_snip(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_snip(attrs \\ %{}) do
+    %Snip{}
+    |> Snip.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a snip.
+
+  ## Examples
+
+      iex> update_snip(snip, %{field: new_value})
+      {:ok, %Snip{}}
+
+      iex> update_snip(snip, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_snip(%Snip{} = snip, attrs) do
+    snip
+    |> Snip.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a Snip.
+
+  ## Examples
+
+      iex> delete_snip(snip)
+      {:ok, %Snip{}}
+
+      iex> delete_snip(snip)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_snip(%Snip{} = snip) do
+    Repo.delete(snip)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking snip changes.
+
+  ## Examples
+
+      iex> change_snip(snip)
+      %Ecto.Changeset{source: %Snip{}}
+
+  """
+  def change_snip(%Snip{} = snip) do
+    Snip.changeset(snip, %{})
+  end
 end

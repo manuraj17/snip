@@ -1,0 +1,20 @@
+defmodule Snipper.Core.Snip do
+  use Ecto.Schema
+  import Ecto.Changeset
+
+
+  schema "snips" do
+    field :content, :string
+    field :title, :string
+    field :user_id, :id
+
+    timestamps()
+  end
+
+  @doc false
+  def changeset(snip, attrs) do
+    snip
+    |> cast(attrs, [:title, :content])
+    |> validate_required([:title, :content])
+  end
+end

@@ -1,0 +1,18 @@
+<h2>Show Snip</h2>
+
+<ul>
+
+  <li>
+    <strong>Title:</strong>
+    <%= @snip.title %>
+  </li>
+
+  <li>
+    <strong>Content:</strong>
+    <%= @snip.content %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: snip_path(@conn, :edit, @snip) %></span>
+<span><%= link "Back", to: snip_path(@conn, :index) %></span>

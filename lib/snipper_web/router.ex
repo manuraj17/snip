@@ -18,6 +18,7 @@ defmodule SnipperWeb.Router do
 
     get "/", PageController, :index
     resources "/users", UserController
+    resources "/snips", SnipController
   end
 
 
