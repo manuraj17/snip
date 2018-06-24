@@ -14,7 +14,7 @@ defmodule Snipper.Core.Snip do
   @doc false
   def changeset(snip, attrs) do
     snip
-    |> cast(attrs, [:title, :content])
-    |> validate_required([:title, :content])
+    |> cast(attrs, [:title, :content, :user_id])
+    |> validate_required([:title, :content, :user_id])
   end
 end

@@ -15,7 +15,7 @@ defmodule SnipperWeb.SnipController do
   end
 
   def create(conn, %{"snip" => snip_params}) do
-    case Core.create_snip(snip_params) do
+    case Core.create_snip(Map.put(snip_params, "user_id", get_session(conn, :user_id))) do
       {:ok, snip} ->
         conn
         |> put_flash(:info, "Snip created successfully.")
