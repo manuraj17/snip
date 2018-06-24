@@ -15,6 +15,7 @@ defmodule SnipperWeb.AuthController do
   end
 
   def delete(conn, _params) do
+    delete_session(conn, :user_id)
     conn
     |> put_flash(:info, "You have been logged out!")
     |> configure_session(drop: true)
@@ -33,6 +34,7 @@ defmodule SnipperWeb.AuthController do
     changeset = Snipper.Core.User.changeset(%Snipper.Core.User{}, user_params)
     case create_or_update_user(changeset) do
       {:ok, user} ->
+        conn = put_session(conn, :user_id, user.id)
         conn 
         |> put_flash(:info, "Successfully authenticated.")
         |> redirect(to: "/")

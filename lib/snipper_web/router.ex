@@ -13,12 +13,32 @@ defmodule SnipperWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :authenticated do
+    plug SnipperWeb.Plugs.RequireAuth
+  end
+
+  pipeline :admin_authenticated do
+    plug SnipperWeb.Plugs.AdminAuth
+  end
+
   scope "/", SnipperWeb do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
-    resources "/users", UserController
+    get "/logout", AuthController, :delete
+  end
+
+  scope "/", SnipperWeb do
+    pipe_through [:browser, :authenticated]
+
+    # resources "/users", UserController
     resources "/snips", SnipController
+  end
+
+  scope "/", SnipperWeb do
+    pipe_through [:browser, :admin_authenticated]
+
+    resources "/users", UserController
   end
 
   scope "/auth", SnipperWeb do
@@ -27,8 +47,6 @@ defmodule SnipperWeb.Router do
     get "/:provider", AuthController, :request
     get "/:provider/callback", AuthController, :callback
   end
-
-
 
   # Other scopes may use custom stacks.
   # scope "/api", SnipperWeb do
