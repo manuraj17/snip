@@ -21,6 +21,13 @@ defmodule SnipperWeb.Router do
     resources "/snips", SnipController
   end
 
+  scope "/auth", SnipperWeb do
+    pipe_through :browser
+  
+    get "/:provider", AuthController, :request
+    get "/:provider/callback", AuthController, :callback
+  end
+
 
 
   # Other scopes may use custom stacks.

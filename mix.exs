@@ -20,7 +20,7 @@ defmodule Snipper.Mixfile do
   def application do
     [
       mod: {Snipper.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :ueberauth_github]
     ]
   end
 
@@ -40,7 +40,8 @@ defmodule Snipper.Mixfile do
       {:phoenix_html, "~> 2.10"},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:gettext, "~> 0.11"},
-      {:cowboy, "~> 1.0"}
+      {:cowboy, "~> 1.0"},
+      {:ueberauth_github, "~> 0.7"}
     ]
   end
 
