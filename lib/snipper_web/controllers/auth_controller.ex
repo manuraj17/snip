@@ -3,6 +3,8 @@ defmodule SnipperWeb.AuthController do
   Auth controller responsible for handling Ueberauth responses
   """
 
+  require Logger
+  require IEx 
   use SnipperWeb, :controller
   plug Ueberauth
 
@@ -25,21 +27,29 @@ defmodule SnipperWeb.AuthController do
     |> redirect(to: "/")
   end
 
-  # def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
-  def callback(conn, _params) do
-    conn
-    |> put_flash(:info, "Successfully authenticated.")
-    |> redirect(to: "/")
-    # case UserFromAuth.find_or_create(auth) do
-    #   {:ok, user} ->
-    #     conn
-    #     |> put_flash(:info, "Successfully authenticated.")
-    #     |> put_session(:current_user, user)
-    #     |> redirect(to: "/")
-    #   {:error, reason} ->
-    #     conn
-    #     |> put_flash(:error, reason)
-    #     |> redirect(to: "/")
-    # end
+  def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
+    user_params = %{ email: auth.info.email, name: auth.info.name, 
+      nickname: auth.info.nickname, token: "token" }
+    changeset = Snipper.Core.User.changeset(%Snipper.Core.User{}, user_params)
+    case create_or_update_user(changeset) do
+      {:ok, user} ->
+        conn 
+        |> put_flash(:info, "Successfully authenticated.")
+        |> redirect(to: "/")
+      {:error, _reason} ->
+        conn
+        |> put_flash(:error, "Sign in failed")
+        |> redirect(to: "/")
+    end
+  end
+
+  # Create user if does not exist
+  def create_or_update_user(changeset) do
+    IEx.pry
+    case Snipper.Repo.get_by(Snipper.Core.User, email: changeset.changes.email) do
+      nil -> Snipper.Repo.insert(changeset)
+      user -> {:ok, user}
+    end
+
   end
 end
