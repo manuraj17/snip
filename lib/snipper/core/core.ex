@@ -197,4 +197,14 @@ defmodule Snipper.Core do
   def change_snip(%Snip{} = snip) do
     Snip.changeset(snip, %{})
   end
+
+  @doc """
+  Returns all the snips of a user
+
+  ## Examples: TODO
+  """
+  def list_user_snips(user_id) do
+    user = Repo.get(User, user_id)
+    Ecto.assoc(user, :snips) |> Repo.all
+  end
 end

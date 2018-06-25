@@ -3,9 +3,9 @@ defmodule SnipperWeb.SnipController do
 
   alias Snipper.Core
   alias Snipper.Core.Snip
-
+  require IEx
   def index(conn, _params) do
-    snips = Core.list_snips()
+    snips = Core.list_user_snips(get_session(conn, :user_id))
     render(conn, "index.html", snips: snips)
   end
 
