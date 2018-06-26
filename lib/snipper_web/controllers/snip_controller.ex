@@ -4,6 +4,10 @@ defmodule SnipperWeb.SnipController do
   alias Snipper.Core
   alias Snipper.Core.Snip
   require IEx
+
+  plug :set_snip when action in [:show, :edit, :update, :delete]
+  plug :validate_user_snip when action in [:show, :edit, :update, :delete]
+
   def index(conn, _params) do
     snips = Core.list_user_snips(get_session(conn, :user_id))
     render(conn, "index.html", snips: snips)
@@ -56,5 +60,25 @@ defmodule SnipperWeb.SnipController do
     conn
     |> put_flash(:info, "Snip deleted successfully.")
     |> redirect(to: snip_path(conn, :index))
+  end
+
+  def set_user(conn, _) do
+    assign(conn, :user, Snipper.Repo.get(Snipper.Core.User, conn.params["user_id"]))
+  end
+
+  def set_snip(conn, _) do
+    assign(conn, :snip, Snipper.Repo.get(Snipper.Core.Snip, conn.params["id"]))
+  end
+
+  def validate_user_snip(conn, _) do
+    user_id = get_session(conn, :user_id)
+    if conn.assigns.snip.user_id == user_id do
+      conn
+    else
+      conn
+      |> put_flash(:error, "Snip not found")
+      |> redirect(to: snip_path(conn, :index))
+      |> halt()
+    end
   end
 end
