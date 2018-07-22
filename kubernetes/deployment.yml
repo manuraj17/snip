@@ -1,0 +1,20 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: snipper-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: snipper-phoenix
+  template:
+    metadata:
+        name: snipper
+        labels:
+          app: snipper-phoenix
+    spec:
+      containers:
+      - name: snipper
+        image: manuraj/snipper:latest
+        ports:
+        - containerPort: 4000
